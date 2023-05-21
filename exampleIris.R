@@ -4,7 +4,7 @@ library(GGally)
 
 data(iris)
 iris <- as_tibble(iris)
-iris
+
 
 print(iris, n = 3, width = Inf)
 
@@ -53,7 +53,7 @@ sample(c("A", "B", "C"), size = 10, replace = TRUE)
 # de un vector con índices de fila (usando las funciones seq() y nrow()). Luego, el vector de muestra se
 # usa para dividir las filas del conjunto de datos.
 take <- sample(seq(nrow(iris)), size = 15)
-take
+
 
 iris[take, ]
 
@@ -71,7 +71,7 @@ ggpairs(s, aes(color = Species))
 
 library(sampling)
 id2 <- strata(iris, stratanames = "Species", size = c(5,5,5), method = "srswor")
-id2
+
 s2 <- iris %>% slice(id2$ID_unit)
 ggpairs(s2, aes(color = Species))
 
@@ -144,13 +144,13 @@ ggplot(iris, aes(Petal.Width)) + geom_histogram(binwidth = .2) +
 scale_numeric <- function(x) x %>% mutate_if(is.numeric, function(y) as.vector(scale(y)))
 
 iris.scaled <- iris %>% scale_numeric()
-iris.scaled
+
 summary(iris.scaled)
 
 # 1.6 PROXIMIDADES : Semejanzas y distancias
 # 1.6.1 DISTANCIAS DE MINKOSKY
 iris_sample <- iris.scaled %>% select(-Species) %>% slice(1:5)
-iris_sample
+
 
 dist(iris_sample, method = "euclidean")
 dist(iris_sample, method = "manhattan")
@@ -163,10 +163,10 @@ b <- rbind(
   c(0,0,0,1,1,1,1,0,0,1),
   c(0,0,1,1,1,0,0,1,0,0)
 )
-b
+
 #apply -> aplicar alguna funcion 
 b_logical <- apply(b, MARGIN = 2, as.logical)
-b_logical
+
 
 # 1.6.2.1 DISTANIA DE HAMMING
 
@@ -182,10 +182,10 @@ people <- tibble(
   weight = c(       52,     90,     75),
   sex    = c( "female", "male", "male")
 )
-people
+
 
 people <- people %>% mutate_if(is.character, factor)
-people
+
 
 
 # 1.6.3.1 COEFICIENTE DE GOWER
@@ -193,20 +193,20 @@ people
 library(proxy)
 
 d_Gower <- dist(people, method = "Gower")
-d_Gower
+
 
 
 # 1.6.3.2 USO DE LA DISTANCIA EUCLIDIANA CON DATOS MIXTOS
 
 library(caret)
 data_dummy <- dummyVars(~., people) %>% predict(people)
-data_dummy
+
 weight_matrix <- matrix(c(1, 1, 1/2, 1/2), ncol = 4, nrow = nrow(data_dummy), byrow = TRUE)
 data_dummy_scaled <- scale(data_dummy) * weight_matrix
 
 #dist -> me da una matriz de distancias
 d_dummy <- dist(data_dummy_scaled)
-d_dummy
+
 
 ggplot(tibble(d_dummy, d_Gower), aes(x = d_dummy, y = d_Gower)) +
   geom_point() +
@@ -224,7 +224,7 @@ pr_DB$get_entry_names()
 #Cor -> Me da una matriz de correlacion
 
 cc <- iris %>% select(-Species) %>% cor()
-cc
+
 
 ggplot(iris, aes(Petal.Length, Petal.Width)) + 
   geom_point() +
