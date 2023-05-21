@@ -79,17 +79,14 @@ ggpairs(s2, aes(color = Species))
 # 1.5 CARACTERISTICAS
 
 # library(plotly) # No cargo el paquete porque su espacio de nombres choca con select en dplyr.
-plotly::plot_ly(iris, x = ~Sepal.Length, y = ~Petal.Length, z = ~Sepal.Width,
-                size = ~Petal.Width, color = ~Species, type="scatter3d")
+plotly::plot_ly(iris, x = ~Sepal.Length, y = ~Petal.Length, z = ~Sepal.Width, size = ~Petal.Width, color = ~Species, type="scatter3d")
 pc <- iris %>% select(-Species) %>% as.matrix() %>% prcomp()
 summary(pc)
 plot(pc, type = "line")
 str(pc)
 iris_projected <- as_tibble(pc$x) %>% add_column(Species = iris$Species)
-ggplot(iris_projected, aes(x = PC1, y = PC2, color = Species)) + 
-  geom_point()
-ggplot(iris_projected, 
-       aes(x = PC1, y = 0, color = Species)) + 
+ggplot(iris_projected, aes(x = PC1, y = PC2, color = Species)) + geom_point()
+ggplot(iris_projected, aes(x = PC1, y = 0, color = Species)) + 
   geom_point() +
   scale_y_continuous(expand=c(0,0)) +
   theme(axis.text.y = element_blank(),
@@ -120,16 +117,21 @@ library(arules)
 iris %>% pull(Petal.Width) %>% discretize(method = "interval", breaks = 3)
 iris %>% pull(Petal.Width) %>% discretize(method = "frequency", breaks = 3)
 iris %>% pull(Petal.Width) %>% discretize(method = "cluster", breaks = 3)
+
 ggplot(iris, aes(Petal.Width)) + geom_histogram(binwidth = .2) +
-  geom_vline(xintercept =
-               iris %>% pull(Petal.Width) %>% discretize(method = "interval", breaks = 3, onlycuts = TRUE),
-             color = "blue") +
+  geom_vline(xintercept = iris %>% pull(Petal.Width) %>% discretize(
+    method = "interval",
+    breaks = 3,
+    onlycuts = TRUE),
+  color = "blue") +
   labs(title = "Discretization: interval", subtitle = "Blue lines are boundaries")
+
 ggplot(iris, aes(Petal.Width)) + geom_histogram(binwidth = .2) +
   geom_vline(xintercept =
                iris %>% pull(Petal.Width) %>% discretize(method = "frequency", breaks = 3, onlycuts = TRUE),
              color = "blue") +
   labs(title = "Discretization: frequency", subtitle = "Blue lines are boundaries")
+
 ggplot(iris, aes(Petal.Width)) + geom_histogram(binwidth = .2) +
   geom_vline(xintercept =
                iris %>% pull(Petal.Width) %>% discretize(method = "cluster", breaks = 3, onlycuts = TRUE),
@@ -162,6 +164,7 @@ b <- rbind(
   c(0,0,1,1,1,0,0,1,0,0)
 )
 b
+#apply -> aplicar alguna funcion 
 b_logical <- apply(b, MARGIN = 2, as.logical)
 b_logical
 
@@ -173,6 +176,7 @@ dist(b, method = "binary")
 
 # 1.6.3 DISTNCIAS PARA DATOS MIXTOS
 
+#tibble -> es una estructura de rstudio ~ matriz
 people <- tibble(
   height = c(      160,    185,    170),
   weight = c(       52,     90,     75),
@@ -200,6 +204,7 @@ data_dummy
 weight_matrix <- matrix(c(1, 1, 1/2, 1/2), ncol = 4, nrow = nrow(data_dummy), byrow = TRUE)
 data_dummy_scaled <- scale(data_dummy) * weight_matrix
 
+#dist -> me da una matriz de distancias
 d_dummy <- dist(data_dummy_scaled)
 d_dummy
 
@@ -215,6 +220,8 @@ pr_DB$get_entry_names()
 
 # 1.7 RELACIONES ENTRE CARACTERISTICAS
 # 1.7.1 CORRELACION
+
+#Cor -> Me da una matriz de correlacion
 
 cc <- iris %>% select(-Species) %>% cor()
 cc
