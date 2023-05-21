@@ -230,6 +230,55 @@ ggplot(iris, aes(Petal.Length, Petal.Width)) +
   geom_point() +
   geom_smooth(method = "lm")
 
+#Correlaciones individuales
 with(iris, cor(Petal.Length, Petal.Width))
 
 with(iris, cor.test(Petal.Length, Petal.Width))
+
+#Correlacion de rango
+iris_ord <- iris %>% mutate_if(is.numeric,
+                               function(x) cut(x, 3, labels = c("short", "medium", "long"), ordered = TRUE))
+summary(iris_ord)
+
+iris_ord %>% pull(Sepal.Length)
+iris_ord %>% select(-Species) %>% sapply(xtfrm) %>% cor(method = "kendall")
+iris_ord %>% select(-Species) %>% sapply(xtfrm) %>% cor(method = "spearman")
+
+
+#ESTIMACION DE DENSIDAD
+
+
+ggplot(iris, aes(x = Petal.Length, y = 0)) + geom_point()
+
+
+# HISTOGRAMAS
+
+#Histograma basico DE UNA DIMENSION 
+ggplot(iris, aes(x = Petal.Length)) +
+  geom_histogram() +
+  geom_rug(alpha = 1/2)
+
+#Histograma de dos dimensiones
+ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_bin2d(bins = 10) +
+  geom_jitter(color = "red")
+
+ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_hex(bins = 10) +
+  geom_jitter(color = "red")
+
+# ESTIMACION DE DENSIDAD
+
+library(tidyverse)
+
+#Basico
+ggplot(iris, aes(Petal.Length)) +
+  geom_density(bw = .2) +
+  geom_rug(alpha = 1/2)
+
+
+#Dos dimensiones
+ggplot(iris, aes(Sepal.Length, Sepal.Width)) +
+  geom_density_2d_filled() +
+  geom_jitter()
+
